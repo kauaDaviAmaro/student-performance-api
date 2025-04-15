@@ -3,7 +3,10 @@ import pandas as pd
 
 class Steps:
     def process(self, df):
-        # Placeholder for data processing steps
+        df.columns = df.columns.str.replace(' ', '_')
+        if 'race_ethnicity' in df.columns:
+            df.rename(columns={'race_ethnicity': 'race/ethnicity'}, inplace=True)
+            
         return df
     
     def engineer(self, df):        
@@ -13,19 +16,19 @@ class Steps:
             le = LabelEncoder()
             df[col] = le.fit_transform(df[col])
             
-        df["performance"] = df[["math score", "reading score", "writing score"]].mean(axis=1) > 60
+        df["performance"] = df[["math_score", "reading_score", "writing_score"]].mean(axis=1) > 60
         
         return df
     
     def select(self, df, is_inference=False):
         sel_col = ['gender',
             'race/ethnicity',
-            'parental level of education',
+            'parental_level_of_education',
             'lunch',
-            'test preparation course',
-            'math score',
-            'reading score',
-            'writing score',
+            'test_preparation_course',
+            'math_score',
+            'reading_score',
+            'writing_score',
             'performance', # target variable
         ]
         

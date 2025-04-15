@@ -6,27 +6,22 @@ from steps import Steps
 class Predictor:
     
     def __init__(self):
-        self.estimator = None
+        self.estimator = self.load()
         self.steps = Steps()
     
     def load(self):
         with open('./models/estimator.pkl', 'rb') as f:
-            self.estimator = pickle.load(f)
+            return pickle.load(f)
     
-    def predict(self, df):
-        predictions = self.estimator.predict(df)
+    def predict(self, estimator, df):
+        predictions = estimator.predict(df)
+        return predictions
         
-        predictions_df = pd.DataFrame(predictions, columns=["Predicted Price"])
-        
-        return predictions_df
-        
-    def run(self, df):
-        self.load()
-        
+    def run(self, df):        
         df = self.steps.process(df)
         df = self.steps.engineer(df)
         df = self.steps.select(df, is_inference=True)
         
-        predictions = self.predict(df)
-        
+        predictions = self.predict(self.estimator, df)
+                
         return predictions

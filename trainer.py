@@ -31,21 +31,11 @@ class Trainer:
             pickle.dump(estimator, f)
     
     def run(self):
-        print("Collect")
         df = self.collect()
         
-        print("Process")
         df = self.steps.process(df)
-        
-        print("Engineer")
         df = self.steps.engineer(df)
-        
-        print("Select")
         df = self.steps.select(df)
-        
-        print("Train")
         estimator = self.train(df)
         
-        print("Save")
         self.save(estimator)
-        print("Done!")
